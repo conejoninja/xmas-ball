@@ -34,7 +34,6 @@ func main() {
 		SCK:       machine.D8, // default sck pin
 		Frequency: 10000000,
 	})
-
 	if err != nil {
 		println(err.Error())
 	}
@@ -62,14 +61,19 @@ func main() {
 			// display one of the text messages in a marquee mode
 			w32, _ = tinyfont.LineWidth(&proggy.TinySZ8pt7b, msgs[n-4])
 			for i := int16(8); i > int16(-w32); i-- {
+				// Erase the display
 				disp.ClearDisplay()
+				// Write the message to the buffer (in each iteration it moves one pixel to the left)
 				tinyfont.WriteLine(&disp, &proggy.TinySZ8pt7b, i, 7, msgs[n-4], white)
+				// Send the buffer to the display
 				disp.Display()
+				// add some wait for the next iteration
 				time.Sleep(125 * time.Millisecond)
 			}
 		}
 		disp.ClearDisplay()
 		disp.Display()
+		// Wait 5 seconds for the next random display (message or icon/animation)
 		time.Sleep(5 * time.Second)
 	}
 }
